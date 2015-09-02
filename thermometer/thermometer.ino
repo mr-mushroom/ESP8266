@@ -17,10 +17,29 @@ ESP8266WebServer server ( 80 );
 
 void handleRoot() {
   float temp;
-  DS18B20.requestTemperatures(); 
-    temp = DS18B20.getTempCByIndex(0);
   
-  server.send ( 200, "application/json", String(temp, 1) );
+  DS18B20.requestTemperatures(); 
+  temp = DS18B20.getTempCByIndex(0);
+  
+  char stemp = String(temp, 1);
+
+  temp = "{
+    id:1,
+    values:[
+    {
+      type:'temperature',
+      value:" + stemp + ",
+      unit:'C'
+    },
+    {
+      type:'temperature',
+      value:" + stemp + ",
+      unit:'C'
+    }
+    ]
+  }";
+
+  server.send ( 200, "application/json", temp );
 }
 
 void setup ( void ) {
